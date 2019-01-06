@@ -1,5 +1,5 @@
 # Spectrum-ASD-Tool
-👩🏻‍⚕️ ASD screening using machine learning
+👩🏻‍⚕️ Cross-platform ASD screening using machine learning
 
 ## Introduction
 An early diagnosis of neurodevelopmental disorders can improve treatment and significantly decrease associated healthcare costs. In this GUI-based tool, healthcare professionals and teachers can use supervised learning to diagnose Autistic Spectrum Disorder (ASD) based on behavioral features and individual characteristics. Spectrum uses a neural network from the Keras API.
