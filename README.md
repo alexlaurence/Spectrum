@@ -4,6 +4,8 @@
 ## Introduction
 An early diagnosis of neurodevelopmental disorders can improve treatment and significantly decrease associated healthcare costs. In this GUI-based tool, healthcare professionals and teachers can use supervised learning to diagnose Autistic Spectrum Disorder (ASD) based on behavioral features and individual characteristics. Spectrum uses a neural network from the Keras API.
 
+Through this tool, we were able to predict autism in patients with about 90% accuracy. I also learned how to deal with categorical data; a lot of health applications are going to have categorical data and one way to address this is by using one-hot encoded vectors. Furthermore, I learned how to reduce overfitting using dropout regularization.
+
 <p align="center">
 <img src="https://raw.githubusercontent.com/alexlaurence/Spectrum-ASD-Tool/master/Screenshots/gui1.png" data-canonical-src="https://raw.githubusercontent.com/alexlaurence/Spectrum-ASD-Tool/master/Screenshots/gui1.png" width="425" height="625"/>
 </p>
