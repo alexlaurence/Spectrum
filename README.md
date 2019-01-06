@@ -16,6 +16,11 @@ Through this tool, we were able to predict autism in patients with about 90% acc
 * tensorFlow
 * sklearn
 
+## Features
+* 90% accuracy on supervised learning
+* Screen individual on the spot for ASD
+* Screen groups/cohort for ASD
+
 ## Dataset
 Data Set Name: Autistic Spectrum Disorder Screening Data for Children 
 
