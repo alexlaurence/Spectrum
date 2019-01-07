@@ -1,4 +1,4 @@
-# Spectrum-ASD-Tool
+# Spectrum: The Autism Spectrum Disorders Screening Tool
 👩🏻‍⚕️ Cross-platform Autism screening using Keras API
 
 ## Introduction
