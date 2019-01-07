@@ -42,7 +42,7 @@ Questions must be taken using the ASD Tests App (iOS/Android): http://www.asdtes
 In the predictions, 1 refers to predicted ASD, and 0 refers to predicted non-ASD. The order of each 1s and 0s refers to the order of the participant in the CSV file. For example, the first row (ignoring header) is the first participant. Therefore, 0 1 indicates that participant 1 is ASD, and participant 2 is non-ASD.
 
 ## Relevant Literature
-1) Tabtah, F. (2017). Autism Spectrum Disorder Screening: Machine Learning Adaptation and DSM-5 Fulfillment. Proceedings of the 1st International Conference on Medical and Health Informatics 2017, pp.1-6. Taichung City, Taiwan, ACM.
+1) Tabtah, F. (2017). Autism Spectrum Disorder Screening: Machine Learning Adaptation and DSM-5 Fulfillment. Proceedings of the 1st International Conference on Medical and Health Informatics 2017, pp.1-6. Taichung City, Taiwan, ACM. (http://fadifayez.com/wp-content/uploads/2017/11/Autism-Spectrum-Disorder-Screening-Machine-Learning-Adaptation-and-DSM-5-Fulfillment.pdf)
 2) Thabtah, F. (2017). ASDTests. A mobile app for ASD screening. www.asdtests.com [accessed December  20th, 2017].
 3) Thabtah, F. (2017). Machine Learning in Autistic Spectrum Disorder Behavioural Research: A Review. To Appear in Informatics for Health and Social Care Journal. December, 2017 (in press)
 
