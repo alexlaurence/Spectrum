@@ -23,7 +23,7 @@ Through this tool, we were able to predict autism in patients with about 90% acc
 * Screen groups/cohort for ASD
 
 ## Dataset
-Data Set Name: Autistic Spectrum Disorder Screening Data for Children 
+Data Set Name: Autistic Spectrum Disorder Screening Data for Children (n=293)
 
 The dataset that we're going to be using for this chapter is the Autistic Spectrum Disorder Screening Data for Children Dataset provided by the UCI Machine Learning Repository, which can be found here: https://archive.ics.uci.edu/ml/datasets/Autistic+Spectrum+Disorder+Screening+Data+for+Children++. This dataset contains records of 292 patients or children that have been screened for autism. This contains details of their age, ethnicity, and familial history of autism. We will be using this dataset to predict whether these patients actually have autism.
 
