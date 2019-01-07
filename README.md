@@ -8,6 +8,7 @@ Through this tool, we were able to predict autism in patients with about 90% acc
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/alexlaurence/Spectrum-ASD-Tool/master/Screenshots/gui1.png" data-canonical-src="https://raw.githubusercontent.com/alexlaurence/Spectrum-ASD-Tool/master/Screenshots/gui1.png" width="425" height="625"/>
+<img src="https://raw.githubusercontent.com/alexlaurence/Spectrum-ASD-Tool/master/Screenshots/gui2.png" data-canonical-src="https://raw.githubusercontent.com/alexlaurence/Spectrum-ASD-Tool/master/Screenshots/gui2.png" width="425" height="625"/>
 </p>
 
 ## Dependencies
