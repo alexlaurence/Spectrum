@@ -35,6 +35,9 @@ Manukau Institute of Technology,
 Auckland, New Zealand
 fadi.fayez@manukau.ac.nz
 
+## How To Use
+Questions must be taken using the ASD Tests App (iOS/Android): http://www.asdtests.com/#about_asd. You can then collect demographic data as shown in the dataset descriptions .doc file. You can either collect data via Spectrum by appending each participant to the CSV file, and saving it. Or you can load a pre-existing CSV file and run the test (if you have collected this data by other means). Warning: pressing clear will clear all previous appends if not saved.
+
 ## Relevant Literature
 1) Tabtah, F. (2017). Autism Spectrum Disorder Screening: Machine Learning Adaptation and DSM-5 Fulfillment. Proceedings of the 1st International Conference on Medical and Health Informatics 2017, pp.1-6. Taichung City, Taiwan, ACM.
 2) Thabtah, F. (2017). ASDTests. A mobile app for ASD screening. www.asdtests.com [accessed December  20th, 2017].
