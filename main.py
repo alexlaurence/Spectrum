@@ -19,10 +19,15 @@ import ttk
 from Tkinter import *
 from ttk import *
 
-from screenTest import *
-
 import logging
 import threading
+
+import sys
+import pandas as pd
+import sklearn
+import keras
+
+
 
 class TextHandler(logging.Handler):
     """This class allows you to log to a Tkinter Text or ScrolledText widget"""
@@ -53,10 +58,272 @@ class Autoresized_Notebook(Notebook):
     event.widget.update_idletasks()
 
     tab = event.widget.nametowidget(event.widget.select())
-    event.widget.configure(height=tab.winfo_reqheight())
+    #event.widget.configure(height=tab.winfo_reqheight())
 
 if __name__== "__main__":
     from Tkinter import Frame, Tk
+
+    # region autism tool
+    def run(path):
+
+        # switch to report view
+        notebook.select(tab2)
+
+        # Childhood Autistic Spectrum Disorder Screening using Machine Learning
+        print('Python: {}'.format(sys.version))
+        print('Pandas: {}'.format(pd.__version__))
+        print('Sklearn: {}'.format(sklearn.__version__))
+        print('Keras: {}'.format(keras.__version__))
+
+        '''
+        import the data-set
+        '''
+
+        file = path
+
+        # read the csv
+        data = pd.read_table(file, sep=',', index_col=None)
+
+        # print the shape of the DataFrame, so we can see how many examples we have
+        print('Shape of DataFrame: {}'.format(data.shape))
+        print(data.loc[0])
+
+        # print out multiple patients at the same time
+        data.loc[:10]
+
+        # print out a description of the dataframe
+        data.describe()
+
+        '''
+        data pre-processing
+        '''
+
+        # drop unwanted columns
+        data = data.drop(['result', 'age_desc'], axis=1)
+
+        data.loc[:10]
+
+        # create X and Y datasets for training
+        x = data.drop(['class'], 1)
+        y = data['class']
+
+        x.loc[:10]
+
+        # convert the data to categorical values - one-hot-encoded vectors
+        X = pd.get_dummies(x)
+
+        # print the new categorical column labels
+        X.columns.values
+
+        # print an example patient from the categorical data
+        X.loc[0]
+
+        # convert the class data to categorical values - one-hot-encoded vectors
+        Y = pd.get_dummies(y)
+
+        Y.iloc[:10]
+
+        ''' 
+        Split the Dataset into Training and Testing Datasets 
+        '''
+
+        from sklearn import model_selection
+        # split the X and Y data into training and testing datasets
+        X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, test_size=0.2)
+
+        print(X_train.shape)
+        print(X_test.shape)
+        print(Y_train.shape)
+        print(Y_test.shape)
+
+        # build a neural network using Keras
+        from keras.models import Sequential
+        from keras.layers import Dense
+        from keras.optimizers import Adam
+
+        # define a function to build the keras model
+        def create_model():
+            # create model
+            model = Sequential()
+            model.add(Dense(8, input_dim=96, kernel_initializer='normal', activation='relu'))
+            model.add(Dense(4, kernel_initializer='normal', activation='relu'))
+            model.add(Dense(2, activation='sigmoid'))
+
+            # compile model
+            adam = Adam(lr=0.001)
+            model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
+            return model
+
+        model = create_model()
+
+        print(model.summary())
+
+        '''
+        Training the Network
+        '''
+        # fit the model to the training data
+        model.fit(X_train, Y_train, epochs=50, batch_size=10, verbose=1)
+
+        '''
+        Testing and Performance Metrics
+        '''
+        # generate classification report using predictions for categorical model
+        from sklearn.metrics import classification_report, accuracy_score
+
+        predictions = model.predict_classes(X_test)
+        predictions
+
+        print('Results for Categorical Model')
+        print(accuracy_score(Y_test[['YES']], predictions))
+        print(classification_report(Y_test[['YES']], predictions))
+
+        # output to report file
+        with open("report.txt", "a") as f:
+            # clear the file
+            open('report.txt', 'w').close()
+            # write the file
+            f.write(str('Shape of DataFrame: {}'.format(data.shape))
+                    + "\n" + str(data.loc[0])
+                    + "\n" + str(X_train.shape)
+                    + "\n" + str(X_test.shape)
+                    + "\n" + str(Y_train.shape)
+                    + "\n" + str(Y_test.shape)
+                    + "\n" + "\n" + str(model.summary())
+                    + "\n" + "\n" + 'Predictions (0=OK, 1=ASD)'
+                    + "\n" + str(predictions)
+                    + "\n" + "\n" + 'Results for Categorical Model'
+                    + "\n" + str(accuracy_score(Y_test[['YES']], predictions))
+                    + "\n" + str(classification_report(Y_test[['YES']], predictions))
+                    )
+
+        logging.warn(str('Shape of DataFrame: {}'.format(data.shape))
+                     + "\n" + str(data.loc[1])
+                     + "\n" + "\n" + 'Test-Train split:'
+                     + "\n" + str(X_train.shape)
+                     + "\n" + str(X_test.shape)
+                     + "\n" + str(Y_train.shape)
+                     + "\n" + str(Y_test.shape)
+                     + "\n" + "\n" + 'Model Summary:'
+                     + "\n" + str(model.summary())
+                     + "\n" + "\n" + 'Predictions (0=OK, 1=ASD)'
+                     + "\n" + str(predictions)
+                     + "\n" + "\n" + 'Results for Categorical Model'
+                     + "\n" + str(accuracy_score(Y_test[['YES']], predictions))
+                     + "\n" + "\n" + str(classification_report(Y_test[['YES']], predictions)))
+        #endregion
+
+    def clearcsv():
+        # clear contents
+        open('data/temp.csv', 'w').close()
+
+        # add header
+        with open("data/temp.csv", "a") as f:
+            f.write('A1_Score' + ',' +
+                    'A2_Score' + ',' +
+                    'A3_Score' + ',' +
+                    'A4_Score' + ',' +
+                    'A5_Score' + ',' +
+                    'A6_Score' + ',' +
+                    'A7_Score' + ',' +
+                    'A8_Score' + ',' +
+                    'A9_Score' + ',' +
+                    'A10_Score' + ',' +
+                    'age' + ',' +
+                    'gender' ',' +
+                    'ethnicity' + ',' +
+                    'jundice' + ',' +
+                    'austim' + ',' +
+                    'contry_of_res' + ',' +
+                    'used_app_before' + ',' +
+                    'result' + ',' +
+                    'age_desc' + ',' +
+                    'relation' + ',' +
+                    'class'
+                    )
+
+        import tkMessageBox
+        tkMessageBox.showinfo('CSV File', 'Successfully cleared all  data (temp.csv)!')
+
+    def appendcsv():
+        with open("data/temp.csv", "a") as f:
+            f.write("\n" +
+                    str(a1.get()) + "," +
+                    str(a2.get()) + "," +
+                    str(a3.get()) + "," +
+                    str(a4.get()) + "," +
+                    str(a5.get()) + "," +
+                    str(a6.get()) + "," +
+                    str(a7.get()) + "," +
+                    str(a8.get()) + "," +
+                    str(a9.get()) + "," +
+                    str(a10.get()) + "," +
+                    str(age.get()) + "," +
+                    str(gen.get()) + "," +
+                    str(eth.get()) + "," +
+                    str(jau.get()) + "," +
+                    str(pdd.get()) + "," +
+                    str(res.get()) + "," +
+                    str(app.get()) + "," +
+                    str(score.get()) + "," +
+                    str(age_group.get()) + "," +
+                    str(rel.get()) + "," +
+                    str(asd.get())
+                    )
+
+        import tkMessageBox
+        tkMessageBox.showinfo('CSV File', 'Successfully appended data (temp.csv)!')
+
+        try:
+            from cStringIO import StringIO  # Python 2
+        except ImportError:
+            from io import StringIO
+
+        log_stream = StringIO()
+        logging.basicConfig(stream=log_stream, level=logging.INFO)
+
+        # Log some messages
+        logger.warn(log_stream.getvalue())
+
+        #popup = Toplevel(root)
+
+    def opencsv():
+        import tkFileDialog
+        root.filename = tkFileDialog.askopenfilename(initialdir="/", title="Select file",
+                                                     filetypes=(("csv files", "*.csv"), ("all files", "*.*")))
+        try:
+            run(root.filename)
+            import tkMessageBox
+            tkMessageBox.showinfo('CSV File', 'Successfully opened a custom dataset! Now running test...')
+        except:
+            tkMessageBox.showinfo('CSV File',
+                                  'Did not Load the CSV file')
+
+    def runtest():
+        import tkMessageBox
+        #tkMessageBox.showinfo('CSV File', 'Attempting to run test...')
+        try:
+            run('data/temp.csv')
+        except:
+            tkMessageBox.showinfo('CSV File',
+                                  'Error. Please review your csv file (temp.csv). Do you have enough data?')
+
+    def savecsv():
+        import tkFileDialog
+        f = tkFileDialog.asksaveasfile(mode='w', defaultextension=".csv")
+        if f is None:  # asksaveasfile return `None` if dialog closed with "cancel".
+            return
+        with open('data/temp.csv', 'r') as myfile:
+            data = myfile.read()
+        try:
+            f.write(data)
+            f.close()  # `()` was missing.
+            import tkMessageBox
+            tkMessageBox.showinfo('CSV File',
+                              'Successfully saved your dataset as a new file.')
+        except:
+            tkMessageBox.showinfo('CSV File',
+                                  'Something went wrong. Spectrum could not save your CSV file.')
+    # region WINDOWS
     root = Tk()
     root.resizable(width=False, height=False)
     root.title("Spectrum (2019.1): The Autism Screening Tool")
@@ -64,24 +331,27 @@ if __name__== "__main__":
     # Create main menu bar
     menu_bar = Menu(root)
 
-    # Create the submenu (tearoff is if menu can pop out)
+    # Create the submenu (tear-off is if menu can pop out)
     file_menu = Menu(menu_bar, tearoff=0)
+    tool_menu = Menu(menu_bar, tearoff=1)
 
     # Add commands to submenu
-    file_menu.add_command(label="Quit!", command=root.destroy)
-    file_menu.add_command(label="Exit!", command=root.destroy)
-    file_menu.add_command(label="End!", command=root.destroy)
+    file_menu.add_command(label="Open (.csv)", command=opencsv)
+    file_menu.add_command(label="Save As (.csv)", command=savecsv)
+    file_menu.add_command(label="Quit", command=root.destroy)
+    tool_menu.add_command(label="Run Test", command=runtest)
 
     # Add the "File" drop down sub-menu in the main menu bar
     menu_bar.add_cascade(label="File", menu=file_menu)
+    menu_bar.add_cascade(label="Tools", menu=tool_menu)
 
     notebook = Autoresized_Notebook(root)
 
     tab_control = ttk.Notebook(root)
     tab1 = ttk.Frame(notebook)
     tab2 = ttk.Frame(notebook)
-    notebook.add(tab1, text="New")
-    notebook.add(tab2, text="Load")
+    notebook.add(tab1, text="Test")
+    notebook.add(tab2, text="Report")
 
     a1 = StringVar()
     a2 = StringVar()
@@ -111,11 +381,13 @@ if __name__== "__main__":
     labpadx = 20
     fieldpadx = 0
 
+    #endregion
 
     def clicked():
-        print(a1.get())
+        print('clicked')
 
 
+    # region TAB 1
     """""
     TAB 1
     """""
@@ -327,109 +599,52 @@ if __name__== "__main__":
     class_combo.current(0)  # set the selected item
     class_combo.grid(column=1, row=21, columnspan=2)
 
-    whitespace2 = Label(tab1, text='test')
-    whitespace2.grid(column=1, row=22, columnspan=2)
+    runme = Button(tab1, width=19, text="Run Test", command=runtest)
+    runme.grid(column=0, row=22, columnspan=1)
 
-    #Fill in the rows of the temp csv file
-    def newtest():
-        #clear contents
-        open('temp.csv', 'w').close()
-        #now add in data
-        with open("temp.csv", "a") as f:
-            f.write('A1_Score' +','+
-                    'A2_Score' + ','+
-                    'A3_Score' + ','+
-                    'A4_Score' + ','+
-                    'A5_Score' + ','+
-                    'A6_Score' + ','+
-                    'A7_Score' + ','+
-                    'A8_Score' + ',' +
-                    'A9_Score' + ',' +
-                    'A10_Score'+ ',' +
-                    'age' + ',' +
-                    'gender' ',' +
-                    'ethnicity' + ',' +
-                    'jundice' + ',' +
-                    'austim' + ',' +
-                    'contry_of_res' + ',' +
-                    'used_app_before' + ',' +
-                    'result' + ',' +
-                    'age_desc' + ',' +
-                    'relation' + ',' +
-                    'class'
-                    "\n" +
-                    str(a1.get()) + "," +
-                    str(a2.get()) + "," +
-                    str(a3.get()) + "," +
-                    str(a4.get()) + "," +
-                    str(a5.get()) + "," +
-                    str(a6.get()) + "," +
-                    str(a7.get()) + "," +
-                    str(a8.get()) + "," +
-                    str(a9.get()) + "," +
-                    str(a10.get()) + "," +
-                    str(age.get()) + "," +
-                    str(gen.get()) + "," +
-                    str(eth.get()) + "," +
-                    str(jau.get()) + "," +
-                    str(pdd.get()) + "," +
-                    str(res.get()) + "," +
-                    str(app.get()) + "," +
-                    str(score.get()) + "," +
-                    str(age_group.get()) + "," +
-                    str(rel.get()) + "," +
-                    str(asd.get())
-                    )
-        #Run the screening test
-        run()
-        #switch to report view
-        notebook.select(tab2)
+    append = Button(tab1, width=5, text="Append", command=appendcsv)
+    append.grid(column=1, row=22, columnspan=1)
 
-        import tkMessageBox
-        tkMessageBox.showinfo('Screening Test Complete!', 'Please review the results.')
+    clear = Button(tab1, width=5, text="Clear", command=clearcsv)
+    clear.grid(column=2, row=22, columnspan=1)
 
-        try:
-            from cStringIO import StringIO  # Python 2
-        except ImportError:
-            from io import StringIO
+    load = Button(tab1, width=37, text="Load Custom File And Run", command=opencsv)
+    load.grid(column=0, row=23, columnspan=3)
 
-        log_stream = StringIO()
-        logging.basicConfig(stream=log_stream, level=logging.INFO)
 
-        logging.warn('hello world')
+    # endregion
 
-        # Log some messages
-        logger.warn(log_stream.getvalue())
-
-    btn1 = Button(tab1,  width=15, text="Screening Test", command=newtest)
-    btn1.grid(column=1, row=22, columnspan=2)
-
-    btn2 = Button(tab1, width=15, text="Reset")
-    btn2.grid(column=1, row=23, columnspan=2)
-
+    # region TAB 2
     """""
     TAB 2
     """""
 
-    btn3 = Button(tab2, width=15, text="Browse")
-    btn3.grid(column=0, row=0)
-    path_entry = Entry(tab2, width=16, textvariable=score)
-    path_entry.grid(column=1, row=0, columnspan=2)
+    #btn3 = Button(tab2, width=5, text="Browse")
+    #btn3.grid(column=0, row=0)
+    #path_entry = Entry(tab2, width=31, textvariable=score)
+    #path_entry.grid(column=1, row=0, columnspan=2)
+
+
+    # endregion
+
+    # region popup
 
     import ScrolledText
 
     # Create a ScrolledText widget
-    #st = ScrolledText.ScrolledText(tab2, width=50, height=600, state='disabled')
-    #st.configure(font='TkFixedFont')
-    #st.grid(column=0, row=1)
-    #st.pack()
+    st = ScrolledText.ScrolledText(tab2, width=50, height=600, state='disabled')
+    st.configure(font='TkFixedFont')
+    st.grid(column=0, row=1)
+    st.pack()
 
     # Create textLogger
-    #text_handler = TextHandler(st)
+    text_handler = TextHandler(st)
 
-    # Add the handler to logger
-    #logger = logging.getLogger()
-    #logger.addHandler(text_handler)
+    #Add the handler to logger
+    logger = logging.getLogger()
+    logger.addHandler(text_handler)
+
+    # endregion
 
 
     def center_window(width=300, height=200):

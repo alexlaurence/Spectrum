@@ -1,0 +1,42 @@
+Shape of DataFrame: (292, 19)
+A1_Score                1
+A2_Score                1
+A3_Score                0
+A4_Score                0
+A5_Score                1
+A6_Score                1
+A7_Score                0
+A8_Score                1
+A9_Score                0
+A10_Score               0
+age                     6
+gender                  m
+ethnicity          Others
+jundice                no
+austim                 no
+contry_of_res      Jordan
+used_app_before        no
+relation           Parent
+class                  NO
+Name: 0, dtype: object
+(233, 96)
+(59, 96)
+(233, 2)
+(59, 2)
+
+None
+
+Predictions (0=OK, 1=ASD)
+[0 1 0 0 1 1 0 0 1 0 1 1 0 1 1 0 0 1 0 1 1 0 0 0 0 1 0 0 0 1 0 1 0 0 0 0 0
+ 1 0 1 0 1 0 0 0 1 1 0 1 0 0 0 0 1 1 0 1 1 0]
+
+Results for Categorical Model
+0.9491525423728814
+              precision    recall  f1-score   support
+
+           0       0.91      1.00      0.96        32
+           1       1.00      0.89      0.94        27
+
+   micro avg       0.95      0.95      0.95        59
+   macro avg       0.96      0.94      0.95        59
+weighted avg       0.95      0.95      0.95        59
